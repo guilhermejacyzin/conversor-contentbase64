@@ -1,0 +1,8 @@
+target
+.git
+.github
+data
+output
+spool
+*.log
+*.part

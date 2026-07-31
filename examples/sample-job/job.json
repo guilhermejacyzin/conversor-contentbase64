@@ -1,0 +1,39 @@
+{
+  "schema_version": "base64-file-converter.job.v1",
+  "job_id": "sample-job-0001",
+  "correlation_id": "sample-record-0001",
+  "source_system": "sample-document-api",
+  "flow": "document-ingestion",
+  "operation_id": "get-document-attachments",
+  "integration_tag": "sample-v1",
+  "business_keys": {
+    "record_id": "sample-record-0001"
+  },
+  "metadata": {
+    "environment": "example"
+  },
+  "policy": {
+    "preserve_unknown_formats": true,
+    "continue_after_attachment_error": true,
+    "quarantine_on_attachment_error": true,
+    "expansion": {
+      "enabled": true,
+      "max_depth": 10,
+      "max_extracted_files": 5000,
+      "max_total_extracted_bytes": 2147483648,
+      "max_single_extracted_bytes": 536870912,
+      "max_compression_ratio": 200
+    }
+  },
+  "attachments": [
+    {
+      "attachment_id": "sample-attachment-0001",
+      "filename": "hello.txt",
+      "base64_path": "payloads/hello.txt.b64",
+      "output_relative_path": "sample-record-0001/hello.txt",
+      "expected_size_bytes": 15,
+      "expected_media_type": "text/plain",
+      "expand_containers": true
+    }
+  ]
+}

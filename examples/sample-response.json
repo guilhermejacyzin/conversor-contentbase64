@@ -1,0 +1,9 @@
+{
+  "recordId": "sample-record-0001",
+  "attachments": [
+    {
+      "filename": "hello.txt",
+      "contentBase64": "SGVsbG8sIEJhc2U2NCEK"
+    }
+  ]
+}

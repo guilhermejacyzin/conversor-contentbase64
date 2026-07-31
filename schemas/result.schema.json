@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/guilhermejacyzin/conversor-contentbase64/schemas/result.schema.json",
+  "title": "Base64 File Converter Result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "job_id",
+    "correlation_id",
+    "source_system",
+    "business_keys",
+    "metadata",
+    "status",
+    "started_at",
+    "finished_at",
+    "duration_ms",
+    "decoded_bytes",
+    "extracted_bytes",
+    "attachments"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "base64-file-converter.result.v1"
+    },
+    "job_id": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "source_system": {
+      "type": "string"
+    },
+    "flow": {
+      "type": "string"
+    },
+    "operation_id": {
+      "type": "string"
+    },
+    "integration_tag": {
+      "type": "string"
+    },
+    "business_keys": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "partial",
+        "quarantined",
+        "failed"
+      ]
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "decoded_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "extracted_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/attachment_result"
+      }
+    }
+  },
+  "$defs": {
+    "media_inspection": {
+      "type": "object",
+      "required": [
+        "media_type",
+        "extension",
+        "signature_status"
+      ],
+      "properties": {
+        "media_type": {
+          "type": "string"
+        },
+        "extension": {
+          "type": "string"
+        },
+        "signature_status": {
+          "type": "string"
+        },
+        "detected_by_signature": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "warning": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "attachment_result": {
+      "type": "object",
+      "required": [
+        "attachment_id",
+        "filename",
+        "status",
+        "metadata"
+      ],
+      "properties": {
+        "attachment_id": {
+          "type": "string"
+        },
+        "filename": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "completed",
+            "partial",
+            "quarantined",
+            "failed"
+          ]
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "decode": {
+          "type": "object"
+        },
+        "expansion": {
+          "type": "object"
+        },
+        "error": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

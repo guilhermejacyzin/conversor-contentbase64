@@ -1,0 +1,54 @@
+[package]
+name = "base64-file-converter"
+version = "0.1.1"
+edition = "2024"
+rust-version = "1.97"
+description = "Portable streaming Base64-to-file converter with integrity and safety checks"
+license = "MIT"
+repository = "https://github.com/guilhermejacyzin/conversor-contentbase64"
+readme = "README.md"
+keywords = ["base64", "attachments", "email", "security", "streaming"]
+categories = ["command-line-utilities", "encoding", "filesystem"]
+publish = false
+
+[lib]
+name = "base64_file_converter"
+path = "src/lib.rs"
+
+[[bin]]
+name = "base64-file-converter"
+path = "src/main.rs"
+
+[dependencies]
+base64 = "0.23"
+clap = { version = "4.5", features = ["derive"] }
+ctrlc = "3.5"
+hex = "0.4"
+infer = "0.22"
+mail-parser = "0.11.5"
+msg_parser = "0.3.6"
+rayon = "1.12"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sevenz-rust2 = { version = "0.21.3", default-features = false, features = ["bzip2", "ppmd", "util"] }
+sha2 = "0.11"
+thiserror = "2.0"
+time = { version = "0.3", features = ["formatting"] }
+tnef = "0.1.1"
+unrar = "0.5.8"
+zip = { version = "6.0.0", default-features = false, features = ["bzip2", "deflate", "deflate64", "lzma", "zstd", "xz"] }
+
+[dev-dependencies]
+tempfile = "3.23"
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"
+
+[profile.release]
+codegen-units = 1
+lto = "thin"
+opt-level = 3
+overflow-checks = true
+panic = "abort"
+strip = "symbols"

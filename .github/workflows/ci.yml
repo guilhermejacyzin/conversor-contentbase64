@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Rust ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install pinned Rust toolchain
+        run: rustup show
+
+      - name: Formatting
+        run: cargo fmt --all --check
+
+      - name: Check
+        run: cargo check --all-targets --locked
+
+      - name: Clippy
+        run: cargo clippy --all-targets --locked -- -D warnings
+
+      - name: Tests
+        run: cargo test --all-targets --locked
+
+      - name: Documentation
+        run: cargo doc --no-deps --locked
+
+      - name: Release build
+        run: cargo build --release --locked
+
+  public-repository-audit:
+    name: Public repository audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Compile Python example
+        run: python -m py_compile examples/python_adapter.py
+
+      - name: Test Python producer
+        run: python -m unittest discover -s tests_python -v
+
+      - name: Reject private data in the tree, history and Base64 fixtures
+        run: python scripts/audit_public_repo.py
+
+  dependency-policy:
+    name: Dependency policy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Advisories, licenses, bans and sources
+        uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2
+        with:
+          command: check
+
+  container:
+    name: Container build and smoke test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Build image
+        run: docker build --tag base64-file-converter:ci .
+
+      - name: Run capabilities
+        run: docker run --rm base64-file-converter:ci capabilities

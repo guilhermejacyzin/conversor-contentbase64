@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/guilhermejacyzin/conversor-contentbase64/schemas/job.schema.json",
+  "title": "Base64 File Converter Job v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "job_id",
+    "correlation_id",
+    "source_system",
+    "attachments"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "base64-file-converter.job.v1"
+    },
+    "job_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "correlation_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "source_system": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "flow": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "operation_id": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "integration_tag": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "business_keys": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "maxLength": 512
+      }
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "policy": {
+      "$ref": "#/$defs/policy"
+    },
+    "attachments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/attachment"
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.:@-]+$"
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_decoded_bytes_per_attachment": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "preserve_unknown_formats": {
+          "type": "boolean"
+        },
+        "continue_after_attachment_error": {
+          "type": "boolean"
+        },
+        "quarantine_on_attachment_error": {
+          "type": "boolean"
+        },
+        "fsync_audit_events": {
+          "type": "boolean"
+        },
+        "expansion": {
+          "$ref": "#/$defs/expansion"
+        }
+      }
+    },
+    "expansion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "max_depth": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "max_extracted_files": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_total_extracted_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_single_extracted_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_compression_ratio": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "expand_eml": {
+          "type": "boolean"
+        },
+        "expand_msg": {
+          "type": "boolean"
+        },
+        "expand_zip": {
+          "type": "boolean"
+        },
+        "expand_7z": {
+          "type": "boolean"
+        },
+        "expand_rar": {
+          "type": "boolean"
+        },
+        "expand_tnef": {
+          "type": "boolean"
+        },
+        "fail_on_container_error": {
+          "type": "boolean"
+        },
+        "fsync_extracted_files": {
+          "type": "boolean"
+        }
+      }
+    },
+    "attachment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attachment_id",
+        "filename",
+        "output_relative_path"
+      ],
+      "properties": {
+        "attachment_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "filename": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "base64_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "content_base64": {
+          "type": "string"
+        },
+        "output_relative_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expected_sha256": {
+          "type": "string",
+          "pattern": "^[A-Fa-f0-9]{64}$"
+        },
+        "expected_media_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "base64_variant": {
+          "enum": [
+            "standard",
+            "url_safe"
+          ]
+        },
+        "expand_containers": {
+          "type": "boolean"
+        },
+        "metadata": {
+          "type": "object"
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "base64_path"
+          ],
+          "not": {
+            "required": [
+              "content_base64"
+            ]
+          }
+        },
+        {
+          "required": [
+            "content_base64"
+          ],
+          "not": {
+            "required": [
+              "base64_path"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

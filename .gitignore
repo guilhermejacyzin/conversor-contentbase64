@@ -1,0 +1,12 @@
+/target/
+*.part
+.env
+.idea/
+.vscode/
+/data/
+/output/
+/spool/
+*.log
+*.pdb
+__pycache__/
+*.py[cod]
