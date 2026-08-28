@@ -616,6 +616,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "lzma-rust2"
+version = "0.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e6effa5c575f68109664a511f378c0e170888e33a426694ee0910a673762bd47"
+
+[[package]]
 name = "mail-parser"
 version = "0.11.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -868,14 +874,14 @@ dependencies = [
 
 [[package]]
 name = "sevenz-rust2"
-version = "0.21.3"
+version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b5d71c87d24cb22976f3f6e6c2c9296ef1f6958394e2b868d56ca01b082798a"
+checksum = "c60ac6abbc2cc83e80d7c0c1450a46880272169f392122f439d6be9d99b22c7a"
 dependencies = [
  "bzip2",
  "crc32fast",
  "js-sys",
- "lzma-rust2",
+ "lzma-rust2 0.20.0",
  "ppmd-rust",
  "wasm-bindgen",
 ]
@@ -1231,7 +1237,7 @@ dependencies = [
  "deflate64",
  "flate2",
  "indexmap",
- "lzma-rust2",
+ "lzma-rust2 0.16.5",
  "memchr",
  "typed-path",
  "zopfli",
